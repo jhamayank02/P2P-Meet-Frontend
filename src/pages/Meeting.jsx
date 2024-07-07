@@ -68,6 +68,16 @@ const Meeting = () => {
     const screenShareHandler = async () => {
         if (peerConnection) {
             try {
+                // If user is accessing the website from phone
+                let userDetails = navigator.userAgent;
+                let regexp = /android|iphone|kindle|ipad/i;
+
+                let isMobileDevice = regexp.test(userDetails);
+
+                if(isMobileDevice){
+                    throw Error('Screen share feature is not available on mobile phones or tablets.')
+                }
+
                 const screenStream = await navigator.mediaDevices.getDisplayMedia();
                 const [videoTrack] = await screenStream.getVideoTracks();
                 const sender = await peerConnection.getSenders().find((s) => s.track.kind === 'video');

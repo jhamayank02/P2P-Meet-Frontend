@@ -91,7 +91,7 @@ const NavBar = () => {
 
     return (
         <Box>
-            <HStack paddingX="40px" paddingY="8px" alignItems="center" justifyContent="space-between">
+            <HStack paddingX="11px" paddingY="8px" alignItems="center" justifyContent="space-between">
                 <Link to="/home">
                     <Flex cursor="pointer" alignItems="center">
                         <Image h="20px" w="30px" src={logo} marginRight="10px" />
@@ -112,7 +112,7 @@ const NavBar = () => {
                 </Menu>
             </HStack>
 
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal size="sm" scrollBehavior='inside' isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Meetings Scheduled By You</ModalHeader>

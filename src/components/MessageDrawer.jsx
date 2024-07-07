@@ -17,14 +17,16 @@ import {
 import { useState, useEffect, useContext } from 'react';
 import { BiSolidSend } from "react-icons/bi";
 import { SocketContext } from '../context/SocketContextProvider';
+import { useSelector } from 'react-redux';
 
 const MessageDrawer = ({ isMessageDrawerOpen, onMessageDrawerClose, remoteUserName, dataChannel, peerConnection, remoteSocketId, isPeersConnected }) => {
 
   const [message, setMessage] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [connected, setConnected] = useState(false);
+  // const [connected, setConnected] = useState(false);
 
   const socket = useContext(SocketContext);
+  const auth = useSelector(state => state?.auth);
 
   const sendMessageHandler = () => {
     if (message.trim() === '') {
@@ -35,7 +37,7 @@ const MessageDrawer = ({ isMessageDrawerOpen, onMessageDrawerClose, remoteUserNa
     //   setMessages(prev => [...prev, { message, sender: "You" }]);
     // }
     if (isPeersConnected && socket.connected) {
-      socket.emit("CHAT", { to: remoteSocketId?.current, message });
+      socket.emit("CHAT", { to: remoteSocketId?.current, message, sender:  auth?.name});
       setMessages(prev => [...prev, { message, sender: "You" }]);
     }
     setMessage('');
@@ -43,7 +45,7 @@ const MessageDrawer = ({ isMessageDrawerOpen, onMessageDrawerClose, remoteUserNa
 
   useEffect(() => {
     socket.on("CHAT", (data) => {
-      setMessages(prev => [...prev, { message: data.message, sender: remoteUserName }]);
+      setMessages(prev => [...prev, { message: data.message, sender: data.sender }]);
     })
 
     return () => {

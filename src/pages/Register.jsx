@@ -57,7 +57,7 @@ const Register = () => {
         <Box position={"relative"} h={"100vh"} w={"100vw"}>
             <AbsoluteCenter w={{ base: "95%", md: "40%" }} paddingX="15px" paddingY="40px" borderWidth="1px" borderStyle="solid" borderColor="#ecf0f5" borderRadius="6px">
                 <Heading textAlign={"left"} size="2xl" marginBottom="5px">Register Page</Heading>
-                <Text marginBottom={"40px"} textAlign={"left"} fontSize="2xl">Welcome, create an account to continue</Text>
+                <Text marginBottom={"40px"} textAlign={"left"} fontSize={{sm: "xl", md: "2xl"}}>Welcome, create an account to continue</Text>
 
                 {/* <FormControl> */}
                 <Stack spacing={3} width={"100%"} >
