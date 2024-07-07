@@ -9,6 +9,7 @@ import { useCookies } from 'react-cookie';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { FaCopy } from "react-icons/fa6";
+import REACT_APP_BACKEND_URL from '../../backend';
 
 const NavBar = () => {
 
@@ -30,7 +31,7 @@ const NavBar = () => {
     
     const myMeetingsHandler = async () => {
         try {
-            const url = process.env.REACT_APP_BACKEND_URL + 'meeting/my-meetings';
+            const url = REACT_APP_BACKEND_URL + 'meeting/my-meetings';
             const response = await fetch(url, {
                 method: "GET",
                 headers: {

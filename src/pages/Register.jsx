@@ -4,6 +4,7 @@ import { EmailIcon, PhoneIcon } from '@chakra-ui/icons';
 import { FaUnlock, FaCircleUser } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
+import REACT_APP_BACKEND_URL from "../../backend";
 
 const Register = () => {
 
@@ -19,7 +20,7 @@ const Register = () => {
             return;
         }
 
-        const url = process.env.REACT_APP_BACKEND_URL + 'auth/register';
+        const url = REACT_APP_BACKEND_URL + 'auth/register';
         setIsRegistering(true);
 
         const data = {

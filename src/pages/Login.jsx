@@ -7,6 +7,7 @@ import { FaUnlock } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { userExists } from "../redux/reducers/auth";
 import { useDispatch } from "react-redux";
+import REACT_APP_BACKEND_URL from "../../backend";
 
 const Login = () => {
 
@@ -25,7 +26,7 @@ const Login = () => {
         }
 
         setIsLoggingIn(true);
-        const url = process.env.REACT_APP_BACKEND_URL + 'auth/login';
+        const url = REACT_APP_BACKEND_URL + 'auth/login';
 
         const data = {
             "email": email,
@@ -59,7 +60,7 @@ const Login = () => {
 
     const handleLoginWithCookie = async () => {
         if (cookies.access_token) {
-            const url = process.env.REACT_APP_BACKEND_URL + 'auth/check-is-logged-in';
+            const url = REACT_APP_BACKEND_URL + 'auth/check-is-logged-in';
 
             try {
                 const response = await fetch(url, {

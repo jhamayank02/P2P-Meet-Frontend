@@ -5,6 +5,7 @@ import { useCookies } from 'react-cookie';
 import { Stack, InputGroup, InputLeftElement, Input, InputRightElement, Box, AbsoluteCenter, Button, Heading, Text, Checkbox, Flex, Toast } from "@chakra-ui/react";
 import { EmailIcon } from '@chakra-ui/icons';
 import { FaAlignCenter, FaClock, FaCopy } from "react-icons/fa6";
+import REACT_APP_BACKEND_URL from '../../backend';
 
 const NewMeetingForm = () => {
 
@@ -27,7 +28,7 @@ const NewMeetingForm = () => {
             return;
         }
 
-        const url = process.env.REACT_APP_BACKEND_URL + 'meeting/new-meeting';
+        const url = REACT_APP_BACKEND_URL + 'meeting/new-meeting';
         setIsGenerating(true);
 
         const data = {
