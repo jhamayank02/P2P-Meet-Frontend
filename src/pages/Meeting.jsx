@@ -35,7 +35,7 @@ const Meeting = () => {
 
     const navigate = useNavigate();
 
-    const socket = useContext(SocketContext)
+    const socket = useContext(SocketContext);
     const auth = useSelector(state => state.auth);
     const location = useLocation();
     const meetingCode = location.state?.meetingCode;
@@ -86,35 +86,67 @@ const Meeting = () => {
 
     // Creating the peer connection
     const initConnection = async () => {
-        const { peerConnection, dataChannel, remoteStream } = await createPeerConnection();
+        // const { peerConnection, dataChannel, remoteStream } = await createPeerConnection();
+        const { peerConnection, remoteStream } = await createPeerConnection();
         setPeerConnection(peerConnection);
-        setDataChannel(dataChannel);
+        // setDataChannel(dataChannel);
         setRemoteStream(remoteStream);
         const remoteVideo = document.getElementById('remote-video');
         remoteVideo.srcObject = remoteStream;
         if (peerConnection) {
             // Emit that the user has joined the meeting
             socket.emit("MEETING_JOINED", { email: auth?.email, meetingCode, name: auth?.name })
+
+            let stream = await navigator.mediaDevices.getUserMedia({
+                audio: true,
+                video: true
+            })
+
+            const localVideo = document.getElementById('local-video');
+            localVideo.srcObject = stream;
+
+            stream.getTracks().forEach(track => {
+                console.log("Adding tracks")
+                peerConnection.addTrack(track, stream);
+            })
+            setLocalStream(stream)
         }
     }
-
+    
     useEffect(() => {
         initConnection();
     }, [])
-
+    
+    // useEffect(() => {
+    //     console.log("Turning on camera....")
+    //     prepForCall(setLocalStream)
+    //     .catch(async err => {
+    //         // Else return to homepage
+    //         // TODO -> EMIT USER LEFT
+    //         toast.error(err.message);
+    //         if (peerConnection) {
+    //             await peerConnection.close();
+    //         }
+    //         navigate('/home');
+    //     });
+    // }, [])
+    
     // Getting the user camera and mic access
-    useEffect(() => {
-        prepForCall(setLocalStream)
-            .catch(async err => {
-                // Else return to homepage
-                // TODO -> EMIT USER LEFT
-                toast.error(err.message);
-                if (peerConnection) {
-                    await peerConnection.close();
-                }
-                navigate('/home');
-            });
-    }, []);
+    // useEffect(() => {
+    //     initConnection()
+    //         .then(async ()=>{
+    //             console.log("Turinng on camera")
+    //             await prepForCall(setLocalStream)
+    //         }).catch(async err => {
+    //             // Else return to homepage
+    //             // TODO -> EMIT USER LEFT
+    //             toast.error(err.message);
+    //             if (peerConnection) {
+    //                 await peerConnection.close();
+    //             }
+    //             navigate('/home');
+    //         });
+    // }, []);
 
     // Sending and stoping audio, video and screen sharing streams
     useEffect(() => {
@@ -169,14 +201,14 @@ const Meeting = () => {
     }, [localStream, getVideo, getAudio, getScreen])
 
     // Add audio and video stream to the peer connection
-    useEffect(() => {
-        if (peerConnection && localStream) {
-            console.log("Adding Stream")
-            localStream.getTracks().forEach(track => {
-                peerConnection.addTrack(track, localStream);
-            })
-        }
-    }, [localStream, peerConnection])
+    // useEffect(() => {
+    //     if (peerConnection && localStream) {
+    //         console.log("Adding Stream")
+    //         localStream.getTracks().forEach(track => {
+    //             peerConnection.addTrack(track, localStream);
+    //         })
+    //     }
+    // }, [localStream, peerConnection])
 
     // Handling negotiation
     useEffect(() => {
@@ -185,7 +217,6 @@ const Meeting = () => {
             peerConnection.addEventListener('negotiationneeded', () => {
                 console.log("negotiation needed ....")
                 negotiationNeededListener(peerConnection, socket, remoteSocketId)
-
             });
         }
 
@@ -210,6 +241,8 @@ const Meeting = () => {
                 console.log("Connection state -> ", peerConnection.connectionState)
                 if (peerConnection.connectionState === 'connected') {
                     setIsPeersConnected(true);
+                    socket.emit("REMOTE_VIDEO_ENABLED", {to: remoteSocketId?.current});
+                    socket.emit("REMOTE_AUDIO_ENABLED", {to: remoteSocketId?.current});
                 }
             })
         }
@@ -225,6 +258,8 @@ const Meeting = () => {
                 peerConnection.removeEventListener('connectionstatechange', (e) => {
                     if (peerConnection.connectionState === 'connected') {
                         setIsPeersConnected(true);
+                        socket.emit("REMOTE_VIDEO_ENABLED", {to: remoteSocketId?.current});
+                        socket.emit("REMOTE_AUDIO_ENABLED", {to: remoteSocketId?.current});
                     }
                 })
             }
@@ -243,10 +278,22 @@ const Meeting = () => {
             socket.on('MEETING_ENDED', () => callEndListener(peerConnection, navigate));
             // socket.on('PARTICIPANT_LEFT', () => participantLeftListener(setRemoteUserName, setRemoteSocketId, setIsRemoteVideoEnabled, setIsRemoteAudioEnabled, setIsPeersConnected));
             socket.on('ROOM_FULL', () => roomFullListener(navigate));
-            socket.on('REMOTE_VIDEO_ENABLED', () => setIsRemoteVideoEnabled(true));
-            socket.on('REMOTE_VIDEO_DISABLED', () => setIsRemoteVideoEnabled(false));
-            socket.on('REMOTE_AUDIO_ENABLED', () => setIsRemoteAudioEnabled(true));
-            socket.on('REMOTE_AUDIO_DISABLED', () => setIsRemoteAudioEnabled(false));
+            socket.on('REMOTE_VIDEO_ENABLED', () =>{ 
+                console.log("Remote video enabled");
+                setIsRemoteVideoEnabled(true);
+            })
+            socket.on('REMOTE_VIDEO_DISABLED', () =>{ 
+                console.log("Remote video disabled");
+                setIsRemoteVideoEnabled(false);
+            })
+            socket.on('REMOTE_AUDIO_ENABLED', () =>{ 
+                console.log("Remote audio enabled");
+                setIsRemoteAudioEnabled(true);
+            })
+            socket.on('REMOTE_AUDIO_DISABLED', () => {
+                console.log("Remote audio disabled");
+                setIsRemoteAudioEnabled(false);
+            })
         }
 
 
@@ -261,17 +308,29 @@ const Meeting = () => {
                 socket.off('MEETING_ENDED', () => callEndListener(peerConnection, navigate));
                 // socket.off('PARTICIPANT_LEFT', () => participantLeftListener(setRemoteUserName, setRemoteSocketId, setIsRemoteVideoEnabled, setIsRemoteAudioEnabled, setIsPeersConnected));
                 socket.off('ROOM_FULL', () => roomFullListener(navigate));
-                socket.off('REMOTE_VIDEO_ENABLED', () => setIsRemoteVideoEnabled(true));
-                socket.off('REMOTE_VIDEO_DISABLED', () => setIsRemoteVideoEnabled(false));
-                socket.off('REMOTE_AUDIO_ENABLED', () => setIsRemoteAudioEnabled(true));
-                socket.off('REMOTE_AUDIO_DISABLED', () => setIsRemoteAudioEnabled(false));
+                socket.off('REMOTE_VIDEO_ENABLED', () =>{ 
+                    console.log("Remote video enabled");
+                    setIsRemoteVideoEnabled(true);
+                })
+                socket.off('REMOTE_VIDEO_DISABLED', () =>{ 
+                    console.log("Remote video disabled");
+                    setIsRemoteVideoEnabled(false);
+                })
+                socket.off('REMOTE_AUDIO_ENABLED', () =>{ 
+                    console.log("Remote audio enabled");
+                    setIsRemoteAudioEnabled(true);
+                })
+                socket.off('REMOTE_AUDIO_DISABLED', () => {
+                    console.log("Remote audio disabled");
+                    setIsRemoteAudioEnabled(false);
+                })
             }
         }
     }, [peerConnection]);
 
     return (
         <>
-            <MessageDrawer onMessageDrawerClose={onMessageDrawerClose} isMessageDrawerOpen={isMessageDrawerOpen} remoteUserName={remoteUserName} dataChannel={dataChannel} peerConnection={peerConnection} />
+            <MessageDrawer onMessageDrawerClose={onMessageDrawerClose} isMessageDrawerOpen={isMessageDrawerOpen} remoteUserName={remoteUserName} dataChannel={dataChannel} peerConnection={peerConnection} remoteSocketId={remoteSocketId} isPeersConnected={isPeersConnected} />
 
 
             <Flex position="relative" width="100vw" height="100vh" overflow="hidden" flexDirection={{ base: "column-reverse", md: "row" }}>

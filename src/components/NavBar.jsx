@@ -9,7 +9,7 @@ import { useCookies } from 'react-cookie';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { FaCopy } from "react-icons/fa6";
-import REACT_APP_BACKEND_URL from '../../backend';
+import REACT_APP_BACKEND_URL from '../backend';
 
 const NavBar = () => {
 

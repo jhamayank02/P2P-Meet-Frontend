@@ -75,9 +75,9 @@ const negotiationNeededListener = (peerConnection, socket, remoteSocketId) => {
 
 // Accept negotiation offer and return the answer 
 const negotiationDoneListener = async ({ from, offer }, peerConnection, socket, remoteSocketId) => {
-    console.log("NEGOTIATION DONE")
-    socket.emit("REMOTE_VIDEO_ENABLED", {to: remoteSocketId?.current});
-    socket.emit("REMOTE_AUDIO_ENABLED", {to: remoteSocketId?.current});
+    console.log("NEGOTIATION DONE");
+    // socket.emit("REMOTE_VIDEO_ENABLED", {to: remoteSocketId?.current});
+    // socket.emit("REMOTE_AUDIO_ENABLED", {to: remoteSocketId?.current});
     createAnswer(peerConnection, offer).then(async (ans) => {
         socket.emit("NEGOTIATION_FINAL", { to: from, ans });
     })

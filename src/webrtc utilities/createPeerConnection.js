@@ -12,12 +12,12 @@ const createPeerConnection = async () => {
     try {
         const peerConnection = new RTCPeerConnection(peerConfiguration);
         // Send Channel
-        const dataChannel = peerConnection.createDataChannel("chat");
+        // const dataChannel = peerConnection.createDataChannel("chat");
         const remoteStream = new MediaStream();
 
         return {
             peerConnection,
-            dataChannel,
+            // dataChannel,
             remoteStream
         }
     }

@@ -4,7 +4,7 @@ import { EmailIcon, PhoneIcon } from '@chakra-ui/icons';
 import { FaUnlock, FaCircleUser } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-import REACT_APP_BACKEND_URL from "../../backend";
+import REACT_APP_BACKEND_URL from "../backend";
 
 const Register = () => {
 

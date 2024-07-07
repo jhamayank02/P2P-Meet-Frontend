@@ -14,52 +14,70 @@ import {
   InputGroup,
   InputRightElement
 } from '@chakra-ui/react'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { BiSolidSend } from "react-icons/bi";
+import { SocketContext } from '../context/SocketContextProvider';
 
-const MessageDrawer = ({ isMessageDrawerOpen, onMessageDrawerClose, remoteUserName, dataChannel, peerConnection }) => {
+const MessageDrawer = ({ isMessageDrawerOpen, onMessageDrawerClose, remoteUserName, dataChannel, peerConnection, remoteSocketId, isPeersConnected }) => {
 
   const [message, setMessage] = useState([]);
   const [messages, setMessages] = useState([]);
   const [connected, setConnected] = useState(false);
 
+  const socket = useContext(SocketContext);
 
   const sendMessageHandler = () => {
     if (message.trim() === '') {
       return;
     }
-    if (connected) {
-      dataChannel.send(message);
+    // if (connected) {
+    //   dataChannel.send(message);
+    //   setMessages(prev => [...prev, { message, sender: "You" }]);
+    // }
+    if (isPeersConnected && socket.connected) {
+      socket.emit("CHAT", { to: remoteSocketId?.current, message });
       setMessages(prev => [...prev, { message, sender: "You" }]);
     }
     setMessage('');
   }
 
   useEffect(() => {
-    if (peerConnection) {
-      peerConnection.ondatachannel = (event) => {
-        const receiveChannel = event.channel;
+    socket.on("CHAT", (data) => {
+      setMessages(prev => [...prev, { message: data.message, sender: remoteUserName }]);
+    })
 
-        receiveChannel.onmessage = (event) => {
-          setMessages(prev => [...prev, { message: event.data, sender: remoteUserName }]);
-        }
-      }
+    return () => {
+      socket.off("CHAT", (data) => {
+        setMessages(prev => [...prev, { message: data.message, sender: remoteUserName }]);
+      })
     }
-  }, [peerConnection, remoteUserName])
+  }, []);
+
+  // useEffect(() => {
+  //   if (peerConnection) {
+  //     peerConnection.ondatachannel = (event) => {
+  //       const receiveChannel = event.channel;
+
+  //       receiveChannel.onmessage = (event) => {
+  //         setMessages(prev => [...prev, { message: event.data, sender: remoteUserName }]);
+  //       }
+  //     }
+  //   }
+  // }, [peerConnection, remoteUserName])
 
   // Listen for data channel events
-  useEffect(() => {
-    if (dataChannel) {
-      // Send channel
-      dataChannel.onopen = () => {
-        setConnected(true);
-      }
+  // useEffect(() => {
+  //   if (dataChannel) {
+  //     // Send channel
+  //     dataChannel.onopen = () => {
+  //       setConnected(true);
+  //     }
 
-      dataChannel.onclose = () => {
-        setConnected(false);
-      }
-    }
-  }, [dataChannel])
+  //     dataChannel.onclose = () => {
+  //       setConnected(false);
+  //     }
+  //   }
+  // }, [dataChannel])
 
   return (
     <>
@@ -82,8 +100,12 @@ const MessageDrawer = ({ isMessageDrawerOpen, onMessageDrawerClose, remoteUserNa
             </Flex>
 
             <InputGroup marginTop="3px">
-              <Input disabled={!connected} onChange={(e) => setMessage(e.target.value)} value={message} placeholder='Type something...' />
-              {connected && <InputRightElement>
+              {/* <Input disabled={!connected} onChange={(e) => setMessage(e.target.value)} value={message} placeholder='Type something...' /> */}
+              <Input disabled={!isPeersConnected && socket.connected} onChange={(e) => setMessage(e.target.value)} value={message} placeholder='Type something...' />
+              {/* {connected && <InputRightElement>
+                <BiSolidSend size="26px" color='#3167ff' onClick={sendMessageHandler} />
+              </InputRightElement>} */}
+              {isPeersConnected && socket.connected && <InputRightElement>
                 <BiSolidSend size="26px" color='#3167ff' onClick={sendMessageHandler} />
               </InputRightElement>}
             </InputGroup>

@@ -7,7 +7,7 @@ import { FaUnlock } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { userExists } from "../redux/reducers/auth";
 import { useDispatch } from "react-redux";
-import REACT_APP_BACKEND_URL from "../../backend";
+import REACT_APP_BACKEND_URL from "../backend";
 
 const Login = () => {
 

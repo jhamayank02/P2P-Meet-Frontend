@@ -4,7 +4,7 @@ import { BiSolidAddToQueue, BiSolidKeyboard } from "react-icons/bi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
-import REACT_APP_BACKEND_URL from "../../backend";
+import REACT_APP_BACKEND_URL from "../backend";
 
 const Homepage = () => {
 
