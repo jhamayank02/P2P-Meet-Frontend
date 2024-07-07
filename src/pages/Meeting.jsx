@@ -8,7 +8,7 @@ import { SocketContext } from "../context/SocketContextProvider";
 import createPeerConnection from "../webrtc utilities/createPeerConnection";
 import { useSelector } from "react-redux";
 import prepForCall from "../webrtc utilities/prepForCall";
-import { callAcceptedListener, incomingCallListener, userJoinedListener, userJoinedBeforeListener, negotiationNeededListener, negotiationDoneListener, negotiationFinalListener, callEndListener, roomFullListener } from '../webrtc utilities/socketListeners';
+import { callAcceptedListener, incomingCallListener, userJoinedListener, userJoinedBeforeListener, negotiationNeededListener, negotiationDoneListener, negotiationFinalListener, callEndListener, roomFullListener, participantLeftListener } from '../webrtc utilities/socketListeners';
 import MessageDrawer from "../components/MessageDrawer";
 import { toast } from "react-toastify";
 
@@ -54,6 +54,16 @@ const Meeting = () => {
         await peerConnection.close();
         return navigate('/home');
     }
+
+    // const leftMeetingHandler = async ()=>{
+    //     localStream.getTracks().forEach(track => track.stop());
+    //     if (localScreenStream) {
+    //         localScreenStream.getTracks().forEach(track => track.stop());
+    //     }
+    //     socket.emit("PARTICIPANT_LEFT", { meetingCode });
+    //     await peerConnection.close();
+    //     return navigate('/home');
+    // }
 
     const screenShareHandler = async () => {
         if (peerConnection) {
@@ -231,6 +241,7 @@ const Meeting = () => {
             socket.on('NEGOTIATION_DONE', (data) => negotiationDoneListener(data, peerConnection, socket, remoteSocketId));
             socket.on('NEGOTIATION_FINAL', (data) => negotiationFinalListener(data, socket, remoteSocketId));
             socket.on('MEETING_ENDED', () => callEndListener(peerConnection, navigate));
+            // socket.on('PARTICIPANT_LEFT', () => participantLeftListener(setRemoteUserName, setRemoteSocketId, setIsRemoteVideoEnabled, setIsRemoteAudioEnabled, setIsPeersConnected));
             socket.on('ROOM_FULL', () => roomFullListener(navigate));
             socket.on('REMOTE_VIDEO_ENABLED', () => setIsRemoteVideoEnabled(true));
             socket.on('REMOTE_VIDEO_DISABLED', () => setIsRemoteVideoEnabled(false));
@@ -248,6 +259,7 @@ const Meeting = () => {
                 socket.off('NEGOTIATION_DONE', (data) => negotiationDoneListener(data, peerConnection, socket, remoteSocketId));
                 socket.off('NEGOTIATION_FINAL', (data) => negotiationFinalListener(data, socket, remoteSocketId));
                 socket.off('MEETING_ENDED', () => callEndListener(peerConnection, navigate));
+                // socket.off('PARTICIPANT_LEFT', () => participantLeftListener(setRemoteUserName, setRemoteSocketId, setIsRemoteVideoEnabled, setIsRemoteAudioEnabled, setIsPeersConnected));
                 socket.off('ROOM_FULL', () => roomFullListener(navigate));
                 socket.off('REMOTE_VIDEO_ENABLED', () => setIsRemoteVideoEnabled(true));
                 socket.off('REMOTE_VIDEO_DISABLED', () => setIsRemoteVideoEnabled(false));
@@ -292,7 +304,7 @@ const Meeting = () => {
                     {remoteSocketId?.current && !isRemoteVideoEnabled && <AbsoluteCenter>
                         <Avatar size="xl" name={remoteUserName} />
                     </AbsoluteCenter>}
-                    <video autoPlay style={{ objectFit: "cover", height: "100%", width: "100%" }} id="remote-video"></video>
+                    <video autoPlay style={{ objectFit: "cover", height: `${remoteUserName !== null ? '100%' : '0%'}`, width: "100%" }} id="remote-video"></video>
                 </Box>
 
 
@@ -305,6 +317,7 @@ const Meeting = () => {
                     {!getScreen && <Box onClick={() => { setGetVideo(false); setGetScreen(true); }} backgroundColor="#f73737" padding="7px" marginRight="3px" cursor="pointer" borderRadius="50%"><MdOutlineStopScreenShare color="white" /></Box>}
                     <Box onClick={onMessageDrawerOpen} backgroundColor="#3167ff" padding="7px" marginRight="3px" cursor="pointer" borderRadius="50%"><BiSolidMessage color="white" /></Box>
                     <Box onClick={callEndHandler} backgroundColor="#f73737" padding="7px" marginRight="3px" cursor="pointer" borderRadius="50%"><MdCallEnd color="white" /></Box>
+                    {/* <Box onClick={leftMeetingHandler} backgroundColor="#f73737" padding="7px" marginRight="3px" cursor="pointer" borderRadius="50%"><MdCallEnd color="white" /></Box> */}
                 </Flex>
             </Flex>
         </>

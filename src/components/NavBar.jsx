@@ -94,7 +94,7 @@ const NavBar = () => {
                 <Link to="/home">
                     <Flex cursor="pointer" alignItems="center">
                         <Image h="20px" w="30px" src={logo} marginRight="10px" />
-                        <Text fontWeight="300" fontSize="2xl">Meet Init</Text>
+                        <Text fontWeight="300" fontSize="2xl">P2P Meet</Text>
                     </Flex>
                 </Link>
 
@@ -117,6 +117,7 @@ const NavBar = () => {
                     <ModalHeader>Meetings Scheduled By You</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
+                        {meetings.length === 0 && <Text textAlign="center">You have not scheduled any meeting.</Text>}
                         {meetings.map(meeting => <Flex alignItems="center" justifyContent="space-between" borderBottom="1px #e3dfdf solid" paddingY="4px" paddingX="4px" key={meeting._id}>
                             <Text fontWeight="600" fontSize="18px">{meeting.meetingTopic}</Text>
                             <Text fontSize="18px">{moment(new Date(meeting.meetingDateAndTime)).format("DD/MM/YYYY hh:mm A")}</Text>

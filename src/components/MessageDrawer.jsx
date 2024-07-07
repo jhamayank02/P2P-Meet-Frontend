@@ -40,14 +40,6 @@ const MessageDrawer = ({ isMessageDrawerOpen, onMessageDrawerClose, remoteUserNa
       peerConnection.ondatachannel = (event) => {
         const receiveChannel = event.channel;
 
-        // receiveChannel.onopen = () => {
-        // console.log("Receive channel is open and ready to be used")
-        // }
-
-        // receiveChannel.onclose = () => {
-        // console.log("Receive channel is closed")
-        // }
-
         receiveChannel.onmessage = (event) => {
           setMessages(prev => [...prev, { message: event.data, sender: remoteUserName }]);
         }

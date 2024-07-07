@@ -52,6 +52,16 @@ const callEndListener = async (peerConnection, navigate) => {
     navigate('/home');
 }
 
+// Other participant left meeting
+const participantLeftListener = async (setRemoteUserName, setRemoteSocketId, setIsRemoteVideoEnabled, setIsRemoteAudioEnabled, setIsPeersConnected) => {
+    console.log("Participant left");
+    setRemoteUserName(null);
+    setRemoteSocketId(undefined);
+    setIsRemoteAudioEnabled(false);
+    setIsRemoteVideoEnabled(false);
+    setIsPeersConnected(false);
+}
+
 // Negotiation is needed
 const negotiationNeededListener = (peerConnection, socket, remoteSocketId) => {
     console.log("NEGOTIATION NEEDED")
@@ -95,6 +105,7 @@ export {
     incomingCallListener,
     callAcceptedListener,
     callEndListener,
+    participantLeftListener,
     negotiationNeededListener,
     negotiationDoneListener,
     negotiationFinalListener,

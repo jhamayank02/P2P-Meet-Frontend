@@ -48,7 +48,7 @@ const NewMeetingForm = () => {
 
             const resData = await response.json();
 
-            if (resData.status !== 200) {
+            if (!resData.success) {
                 throw Error(resData.message);
             }
 
