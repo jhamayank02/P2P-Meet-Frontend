@@ -28,7 +28,7 @@ const NavBar = () => {
             navigate('/');
         }
     }
-    
+
     const myMeetingsHandler = async () => {
         try {
             const url = REACT_APP_BACKEND_URL + 'meeting/my-meetings';
@@ -39,7 +39,7 @@ const NavBar = () => {
                 }
             });
             const resData = await response.json();
-            
+
             if (!resData.success) {
                 throw Error(resData.message);
             }
@@ -50,7 +50,7 @@ const NavBar = () => {
             toast.error(err.message);
         }
     }
-    
+
     const deleteMeetingHandler = async (meetingId) => {
         try {
             const url = process.env.REACT_APP_BACKEND_URL + 'meeting/delete-meeting';
@@ -65,11 +65,11 @@ const NavBar = () => {
                 })
             })
             const resData = await response.json();
-            
+
             if (!resData.success) {
                 throw Error(resData.message);
             }
-            
+
             toast.success(resData.message);
             myMeetingsHandler();
         }
@@ -77,7 +77,7 @@ const NavBar = () => {
             toast.error(err.message);
         }
     }
-    
+
     const copyBtnHandler = (meetingCode) => {
         navigator.clipboard.writeText(meetingCode);
         toast.success('Copied to clipboard!')
@@ -119,14 +119,15 @@ const NavBar = () => {
                     <ModalCloseButton />
                     <ModalBody>
                         {meetings.length === 0 && <Text textAlign="center">You have not scheduled any meeting.</Text>}
-                        {meetings.map(meeting => <Flex alignItems="center" justifyContent="space-between" borderBottom="1px #e3dfdf solid" paddingY="4px" paddingX="4px" key={meeting._id}>
-                            <Text fontWeight="600" fontSize="18px">{meeting.meetingTopic}</Text>
-                            <Text fontSize="18px">{moment(new Date(meeting.meetingDateAndTime)).format("DD/MM/YYYY hh:mm A")}</Text>
-                            <Flex alignItems="center" columnGap="5px">
-                                <FaCopy onClick={() => copyBtnHandler(meeting.meetingCode)} color="#cbcccd" size='20px' />
-                                <MdDelete onClick={() => deleteMeetingHandler(meeting._id)} color='#ef1212ab' size='20px' />
+                        {meetings.map(meeting => <Flex width="100%" flexDirection="column" alignItems="start" justifyContent="space-between" borderBottom="1px #e3dfdf solid" paddingY="4px" paddingX="4px" key={meeting._id}>
+                            <Flex width="100%" alignItems="center" justifyContent="space-between">
+                                <Text fontWeight="600" fontSize="18px">Meeting Topic: {meeting.meetingTopic}</Text>
+                                <Flex columnGap="5px">
+                                    <FaCopy onClick={() => copyBtnHandler(meeting.meetingCode)} color="#cbcccd" size='20px' />
+                                    <MdDelete onClick={() => deleteMeetingHandler(meeting._id)} color='#ef1212ab' size='20px' />
+                                </Flex>
                             </Flex>
-
+                            <Text fontSize="18px">Meeting Time: {moment(new Date(meeting.meetingDateAndTime)).format("DD/MM/YYYY hh:mm A")}</Text>
                         </Flex>)}
                     </ModalBody>
 

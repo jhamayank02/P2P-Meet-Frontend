@@ -63,7 +63,7 @@ const NewMeetingForm = () => {
     }
 
     return (
-        <Box position={"relative"} h={"80vh"} w={"100vw"}>
+        <Box overflowX="hidden" position={"relative"} h={"80vh"} w={"100vw"}>
             <AbsoluteCenter w={{ base: "95%", md: "40%" }} paddingX="15px" paddingY="40px" borderWidth="1px" borderStyle="solid" borderColor="#ecf0f5" borderRadius="6px">
 
                 <Box>
