@@ -22,11 +22,9 @@ const userJoinedBeforeListener = async ({ email, name, id }, setRemoteUserName, 
 
 // Other user is calling
 const incomingCallListener = async ({ from, offer }, remoteSocketId, peerConnection, socket) => {
-    // await setLocalDescription(peerConnection, offer)
-    // await setRemoteDescription(peerConnection, offer)
-    console.log("INCOMING CALL", remoteSocketId?.current, offer)
+    // console.log("INCOMING CALL", remoteSocketId?.current, offer)
     createAnswer(peerConnection, offer).then(ans => {
-        console.log("CALL ACCEPTED", ans, peerConnection);
+        // console.log("CALL ACCEPTED", ans, peerConnection);
         socket.emit("CALL_ACCEPTED", { to: remoteSocketId?.current, ans });
     })
     .catch(err => {
@@ -37,7 +35,7 @@ const incomingCallListener = async ({ from, offer }, remoteSocketId, peerConnect
 // The other user has accepted the call
 const callAcceptedListener = async ({ from, ans }, peerConnection, socket) => {
     await setRemoteDescription(peerConnection, ans);
-    console.log("CALL ACCEPTED", ans, peerConnection);
+    // console.log("CALL ACCEPTED", ans, peerConnection);
 }
 
 // Other user has ended the call
@@ -54,7 +52,7 @@ const callEndListener = async (peerConnection, navigate) => {
 
 // Other participant left meeting
 const participantLeftListener = async (setRemoteUserName, setRemoteSocketId, setIsRemoteVideoEnabled, setIsRemoteAudioEnabled, setIsPeersConnected) => {
-    console.log("Participant left");
+    // console.log("Participant left");
     setRemoteUserName(null);
     setRemoteSocketId(undefined);
     setIsRemoteAudioEnabled(false);
@@ -64,7 +62,7 @@ const participantLeftListener = async (setRemoteUserName, setRemoteSocketId, set
 
 // Negotiation is needed
 const negotiationNeededListener = (peerConnection, socket, remoteSocketId) => {
-    console.log("NEGOTIATION NEEDED")
+    // console.log("NEGOTIATION NEEDED")
     createOffer(peerConnection).then((offer) => {
         socket.emit('NEGOTIATION_DONE', { to: remoteSocketId?.current, offer });
     })
@@ -75,9 +73,7 @@ const negotiationNeededListener = (peerConnection, socket, remoteSocketId) => {
 
 // Accept negotiation offer and return the answer 
 const negotiationDoneListener = async ({ from, offer }, peerConnection, socket, remoteSocketId) => {
-    console.log("NEGOTIATION DONE");
-    // socket.emit("REMOTE_VIDEO_ENABLED", {to: remoteSocketId?.current});
-    // socket.emit("REMOTE_AUDIO_ENABLED", {to: remoteSocketId?.current});
+    // console.log("NEGOTIATION DONE");
     createAnswer(peerConnection, offer).then(async (ans) => {
         socket.emit("NEGOTIATION_FINAL", { to: from, ans });
     })
@@ -88,7 +84,7 @@ const negotiationDoneListener = async ({ from, offer }, peerConnection, socket, 
 
 // Negotiation completed
 const negotiationFinalListener = async ({ from, ans }, socket, remoteSocketId) => {
-    console.log("NEGOTIATION FINAL")
+    // console.log("NEGOTIATION FINAL")
     socket.emit("REMOTE_VIDEO_ENABLED", {to: remoteSocketId?.current});
     socket.emit("REMOTE_AUDIO_ENABLED", {to: remoteSocketId?.current});
 }
