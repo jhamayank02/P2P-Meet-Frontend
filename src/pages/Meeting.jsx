@@ -344,7 +344,7 @@ const Meeting = () => {
 
 
             <Flex position="relative" width="100vw" height="100vh" overflow="hidden" flexDirection={{ base: "column-reverse", md: "row" }}>
-                <Box position="relative" backgroundColor="black" width="100%" height={{sm: "50%", md: "100%"}} borderRight={{ sm: "none", md: "1px solid #55545469" }} borderTop={{ sm: "1px solid #55545469", md: "none" }}>
+                <Box position="relative" backgroundColor="black" width="100%" height={{base: "50%", md: "100%"}} borderRight={{ sm: "none", md: "1px solid #55545469" }} borderTop={{ sm: "1px solid #55545469", md: "none" }}>
                     <Flex position="absolute" right="5px" top="5px" fontSize="20px">
                         {isLocalAudioEnabled && <BiMicrophone color="white" />}
                         {!isLocalAudioEnabled && <BiMicrophoneOff color="white" />}
