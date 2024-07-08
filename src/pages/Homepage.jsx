@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AbsoluteCenter, Box, Button, Flex, Heading, Text, InputGroup, InputLeftElement, Input } from "@chakra-ui/react";
 import { BiSolidAddToQueue, BiSolidKeyboard } from "react-icons/bi";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import REACT_APP_BACKEND_URL from "../backend";

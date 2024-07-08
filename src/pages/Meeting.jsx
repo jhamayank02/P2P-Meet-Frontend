@@ -49,7 +49,6 @@ const Meeting = () => {
         if (localScreenStream) {
             localScreenStream.getTracks().forEach(track => track.stop())
         }
-        localStream.getTracks().forEach(track => track.stop())
         socket.emit("MEETING_ENDED", { to: remoteSocketId?.current, meetingCode });
         await peerConnection.close();
         return navigate('/home');
@@ -96,6 +95,7 @@ const Meeting = () => {
 
     // Creating the peer connection
     const initConnection = async () => {
+        try{
         // const { peerConnection, dataChannel, remoteStream } = await createPeerConnection();
         const { peerConnection, remoteStream } = await createPeerConnection();
         setPeerConnection(peerConnection);
@@ -121,6 +121,22 @@ const Meeting = () => {
             })
             setLocalStream(stream)
         }
+    }
+    catch(err){
+        toast.error(err.message);
+        socket.emit("MEETING_ENDED", { to: remoteSocketId?.current, meetingCode });
+        if(peerConnection){
+            await peerConnection.close();
+        }
+        if(localStream){
+            localStream.getTracks().forEach(track => track.stop())
+        }
+        if (localScreenStream) {
+            localScreenStream.getTracks().forEach(track => track.stop())
+        }
+
+        navigate('/home')
+    }
     }
     
     useEffect(() => {
