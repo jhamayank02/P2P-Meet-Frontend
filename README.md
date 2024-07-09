@@ -1,70 +1,63 @@
-# Getting Started with Create React App
+# P2P Meet - Start your video meeting journey with us today!
+[P2P Meet - Start your video meeting journey with us today!](https://jhamayank02.github.io/P2P-Meet-Frontend/)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[Frontend](https://github.com/jhamayank02/P2P-Meet-Frontend)
 
-## Available Scripts
+[Backend](https://github.com/jhamayank02/P2P-Meet/)
 
-In the project directory, you can run:
+Test User Credentials ->
 
-### `npm start`
+User 1 ->
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Email Id - user1@email.com
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Password - 12345
 
-### `npm test`
+User 2 ->
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Email Id - user2@email.com
 
-### `npm run build`
+Password - 12345
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+P2P Meet is an online video meeting application, where we can conduct one-on-one meeting with people. A user can share his/her audio/video and screen with the other participant. P2P Meet has various other features like:
+1. User authentication
+2. New meeting scheduling
+3. Audio, Video and Screen sharing
+4. Realtime chatting during meeting
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Tech Stack Used
+1. React JS
+2. Node JS
+3. Express JS
+4. MongoDB
+5. Chakra UI
+6. WebRTC
+7. Socket.io
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Libraries Used
+#### Frontend
+- @chakra-ui/react
+- moment
+- react-cookie
+- react-redux
+- react-toastify
+- socket.io-client
 
-### `npm run eject`
+#### Backend
+- cors
+- dotenv
+- jsonwebtoken
+- mongoose
+- passport
+- nodemon
+- socket.io
+- uuid
+- bcrypt
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Screenshots
+![Screenshot 2024-07-09 213112](https://github.com/jhamayank02/P2P-Meet/assets/85916933/d438edc7-1d8d-44d3-b338-3dc0fd13d27b)
+![Screenshot 2024-07-09 213035](https://github.com/jhamayank02/P2P-Meet/assets/85916933/619f39b8-ae30-461d-a58c-861b366a36e6)
+![Screenshot 2024-07-09 213008](https://github.com/jhamayank02/P2P-Meet/assets/85916933/86a7f251-96ed-4907-9fa0-6807fbdb8eb8)
+![Screenshot 2024-07-09 212941](https://github.com/jhamayank02/P2P-Meet/assets/85916933/478d44e1-f8f8-466c-83dc-76f6e1264cd8)
+![Screenshot 2024-07-09 212746](https://github.com/jhamayank02/P2P-Meet/assets/85916933/f81661a4-c01c-4bb8-a93d-2254c1ca59d6)
+![Screenshot 2024-07-09 212231](https://github.com/jhamayank02/P2P-Meet/assets/85916933/cad9ffbe-8aec-431b-91c8-e15f6a0523e8)
